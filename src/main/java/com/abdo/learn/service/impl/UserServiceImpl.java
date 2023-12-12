@@ -27,7 +27,19 @@ public class UserServiceImpl implements UsersService {
     @Override
     public UserResponse getUser(Long id) {
         UserEntity user = userRepository.findById(id).get();
-        return userMapper.userEntityToUserResponse(user);  
+        return userMapper.userEntityToUserResponse(user);
+    }
+    
+    @Override
+    public UserEntity getUserEntity(Long id) {
+        UserEntity user = userRepository.findById(id).get();
+        return user;  
+    }
+
+    @Override
+    public Boolean isEmailRegistered(String email) {
+        
+        return userRepository.findByEmail(email).isPresent();
     } 
     
 }

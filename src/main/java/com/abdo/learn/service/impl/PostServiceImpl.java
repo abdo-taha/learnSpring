@@ -1,5 +1,7 @@
 package com.abdo.learn.service.impl;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.abdo.learn.mapper.PostMapper;
@@ -12,6 +14,7 @@ import com.abdo.learn.model.entity.PostEntity;
 import com.abdo.learn.repository.PostRepository;
 import com.abdo.learn.service.AuthService;
 import com.abdo.learn.service.PostService;
+import com.abdo.learn.service.UsersService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -25,6 +28,7 @@ public class PostServiceImpl implements PostService {
     final private AuthService authService;
     final private UserMapper userMapper;
 
+    final private UsersService usersService;
 
     @Override
     public PostResponse createPost(CreatePostRequest postRequest) {
@@ -67,6 +71,16 @@ public class PostServiceImpl implements PostService {
             return postMapper.PostEntityToPostResponse(savedPost);
         }
         return null;
+    }
+
+
+    @Override
+    public List<PostResponse> getPostsByUserId(Long id) {
+        return postRepository
+                .findByUser(usersService.getUserEntity(id))
+                .stream()
+                .map(postMapper::PostEntityToPostResponse)
+                .toList();
     }
 
 

@@ -1,5 +1,5 @@
 package com.abdo.learn.model.dto.response;
 
-public record PhotoResponse(String url) {
+public record PhotoResponse(String id) {
     
 }

@@ -26,6 +26,7 @@ public class PhotoEntity {
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
     @Column(columnDefinition = "VARCHAR(255)")
     private UUID id;
+    private String ext;
     @ManyToOne
     private UserEntity owner;
     //TODO 

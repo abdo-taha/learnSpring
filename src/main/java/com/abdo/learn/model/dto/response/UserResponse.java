@@ -8,6 +8,7 @@ import lombok.Builder;
 public record UserResponse(
     @NotNull Long id,
     @NotEmpty String email,
-    @NotEmpty String name
+    @NotEmpty
+    String name
      ) {
 } 

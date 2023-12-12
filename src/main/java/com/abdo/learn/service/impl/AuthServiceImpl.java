@@ -31,6 +31,9 @@ public class AuthServiceImpl implements AuthService{
     @Override
     public UserResponse registration(UserRegisterRequest user) {
         //TODO add registration logic if any
+        if (usersService.isEmailRegistered(user.email()))
+            return null;
+            
         UserRegisterRequest securedUser = UserRegisterRequest.builder()
                 .email(user.email())
                 .password(passwordEncoder.encode(user.password()))

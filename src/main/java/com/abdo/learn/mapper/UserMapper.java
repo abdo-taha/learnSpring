@@ -14,6 +14,7 @@ public interface UserMapper {
     UserMapper INSTANCE = Mappers.getMapper(UserMapper.class); //singleton
 
     UserResponse userEntityToUserResponse(UserEntity user);
+
     @Mapping(target = "id", ignore = true)
     UserEntity UserRegisterRequestToUserEntity(UserRegisterRequest user);
 
