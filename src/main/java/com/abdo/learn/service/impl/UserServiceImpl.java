@@ -23,5 +23,11 @@ public class UserServiceImpl implements UsersService {
         UserEntity savedUser =  userRepository.save(userMapper.UserRegisterRequestToUserEntity(user));
         return userMapper.userEntityToUserResponse(savedUser);
     }
+
+    @Override
+    public UserResponse getUser(Long id) {
+        UserEntity user = userRepository.findById(id).get();
+        return userMapper.userEntityToUserResponse(user);  
+    } 
     
 }
