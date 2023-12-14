@@ -1,6 +1,9 @@
 package com.abdo.learn.service.impl;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
@@ -10,9 +13,11 @@ import com.abdo.learn.model.dto.request.CreatePostRequest;
 import com.abdo.learn.model.dto.request.EditPostRequest;
 import com.abdo.learn.model.dto.response.PostResponse;
 import com.abdo.learn.model.dto.response.UserResponse;
+import com.abdo.learn.model.entity.PhotoEntity;
 import com.abdo.learn.model.entity.PostEntity;
 import com.abdo.learn.repository.PostRepository;
 import com.abdo.learn.service.AuthService;
+import com.abdo.learn.service.PhotoDBService;
 import com.abdo.learn.service.PostService;
 import com.abdo.learn.service.UsersService;
 
@@ -27,7 +32,7 @@ public class PostServiceImpl implements PostService {
     final private PostMapper postMapper;
     final private AuthService authService;
     final private UserMapper userMapper;
-
+    final private PhotoDBService photoDBService;
     final private UsersService usersService;
 
     @Override
@@ -35,6 +40,11 @@ public class PostServiceImpl implements PostService {
         PostEntity post = postMapper.PostRequestToPostEntity(postRequest);
         UserResponse user = authService.getCurrentUser();
         post.setUser(userMapper.UserResponseToUserEntity(user));
+        Set<PhotoEntity> photos = new HashSet<>();
+        for (UUID id : postRequest.photos()) {
+            photos.add(photoDBService.getPhotoById(id));
+        }
+        post.setPhotos(photos);
         PostEntity savedPost =  postRepository.save(post);
         return postMapper.PostEntityToPostResponse(savedPost);
     }

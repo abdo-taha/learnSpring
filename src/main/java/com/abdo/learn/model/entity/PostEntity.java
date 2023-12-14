@@ -1,13 +1,18 @@
 package com.abdo.learn.model.entity;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 // import jakarta.persistence.PrePersist;
 import lombok.AllArgsConstructor;
@@ -30,6 +35,13 @@ public class PostEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
     
+    @Builder.Default
+    @OneToMany
+    private Set<PhotoEntity> photos = new HashSet<>();
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CommentEntity> comments;
+
 
     @PrePersist
     protected void onCreate() {

@@ -17,4 +17,6 @@ public interface PostService {
     Boolean deletePostById(Long id);
 
     List<PostResponse> getPostsByUserId(Long id);
+
+    
 } 

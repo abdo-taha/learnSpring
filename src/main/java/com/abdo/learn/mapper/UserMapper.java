@@ -5,6 +5,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 import com.abdo.learn.model.dto.request.UserRegisterRequest;
+import com.abdo.learn.model.dto.response.UserIdResponse;
 import com.abdo.learn.model.dto.response.UserResponse;
 import com.abdo.learn.model.entity.UserEntity;
 
@@ -20,4 +21,6 @@ public interface UserMapper {
 
     @Mapping(target = "password", ignore = true)
     UserEntity UserResponseToUserEntity(UserResponse user);
+
+    UserIdResponse UserEntityToUserIdResponse(UserEntity user);
 }

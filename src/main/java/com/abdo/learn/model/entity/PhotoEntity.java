@@ -29,9 +29,6 @@ public class PhotoEntity {
     private String ext;
     @ManyToOne
     private UserEntity owner;
-    //TODO 
-    // @ManyToOne 
-    // private PostEntity post;
     private LocalDateTime createdAt;
     @PrePersist
     protected void onCreate() {

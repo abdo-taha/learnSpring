@@ -52,5 +52,10 @@ public class PhotoDBServiceImpl implements PhotoDBService {
     public List<String> getAllPhotosOfUser(UserEntity user) {
         return photoRepository.findByOwner(user).stream().map((photo)->photoSaveService.getURL(photo.getId().toString()+"."+photo.getExt())).toList();
     }
+
+    @Override
+    public PhotoEntity getPhotoById(UUID id) {
+        return photoRepository.findById(id).get();
+    }
     
 }
