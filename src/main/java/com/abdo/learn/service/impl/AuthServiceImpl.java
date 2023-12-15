@@ -1,5 +1,6 @@
 package com.abdo.learn.service.impl;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -7,6 +8,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.abdo.learn.exception.EmailAlreadyExistException;
 import com.abdo.learn.mapper.UserMapper;
 import com.abdo.learn.model.dto.request.UserLoginRequest;
 import com.abdo.learn.model.dto.request.UserRegisterRequest;
@@ -17,23 +19,22 @@ import com.abdo.learn.service.UsersService;
 
 import lombok.RequiredArgsConstructor;
 
-
-
 @RequiredArgsConstructor
 @Service
-public class AuthServiceImpl implements AuthService{
+public class AuthServiceImpl implements AuthService {
     final private UsersService usersService;
     final private JwtServiceImpl jwtService;
     final private PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
 
     private final UserMapper userMapper;
+
     @Override
     public UserResponse registration(UserRegisterRequest user) {
-        //TODO add registration logic if any
+        // TODO add registration logic if any
         if (usersService.isEmailRegistered(user.email()))
-            return null;
-            
+            throw new EmailAlreadyExistException(HttpStatus.BAD_REQUEST, "email is already registered");
+
         UserRegisterRequest securedUser = UserRegisterRequest.builder()
                 .email(user.email())
                 .password(passwordEncoder.encode(user.password()))
@@ -45,7 +46,6 @@ public class AuthServiceImpl implements AuthService{
 
     @Override
     public String login(UserLoginRequest user) {
-        //TODO learn
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.email(), user.password()));
         return jwtService.generateToken(user);
     }
@@ -54,17 +54,18 @@ public class AuthServiceImpl implements AuthService{
     public UserResponse getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.isAuthenticated()) {
-            return userMapper.userEntityToUserResponse((UserEntity)authentication.getPrincipal());
+            return userMapper.userEntityToUserResponse((UserEntity) authentication.getPrincipal());
         }
 
         return null;
 
     }
+
     @Override
     public UserEntity getCurrentUserEntity() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.isAuthenticated()) {
-            return (UserEntity)authentication.getPrincipal();
+            return (UserEntity) authentication.getPrincipal();
         }
 
         return null;

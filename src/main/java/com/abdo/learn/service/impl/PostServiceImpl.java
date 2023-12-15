@@ -5,8 +5,11 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import com.abdo.learn.exception.NotFoundException;
+import com.abdo.learn.exception.UnAuthorizedOperationException;
 import com.abdo.learn.mapper.PostMapper;
 import com.abdo.learn.mapper.UserMapper;
 import com.abdo.learn.model.dto.request.CreatePostRequest;
@@ -22,7 +25,6 @@ import com.abdo.learn.service.PostService;
 import com.abdo.learn.service.UsersService;
 
 import lombok.RequiredArgsConstructor;
-
 
 @RequiredArgsConstructor
 @Service
@@ -45,35 +47,35 @@ public class PostServiceImpl implements PostService {
             photos.add(photoDBService.getPhotoById(id));
         }
         post.setPhotos(photos);
-        PostEntity savedPost =  postRepository.save(post);
+        PostEntity savedPost = postRepository.save(post);
         return postMapper.PostEntityToPostResponse(savedPost);
     }
 
-
     @Override
     public PostResponse getPostById(Long id) {
-        PostEntity post = postRepository.findById(id).get();
+        PostEntity post = postRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(HttpStatus.NOT_FOUND, "post not found"));
         // System.out.println(post);
         return postMapper.PostEntityToPostResponse(post);
     }
 
-
     @Override
     public Boolean deletePostById(Long id) {
-        PostEntity post = postRepository.findById(id).get();
+        PostEntity post = postRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(HttpStatus.NOT_FOUND, "post not found"));
         UserResponse user = authService.getCurrentUser();
         if (user.id() == post.getUser().getId()) {
             postRepository.delete(post);
             return true;
         }
-        return false;
+
+        throw new UnAuthorizedOperationException(HttpStatus.UNAUTHORIZED, "you can't delete this post");
 
     }
 
-
     @Override
-    public PostResponse editPost(EditPostRequest post,Long id) {
-       
+    public PostResponse editPost(EditPostRequest post, Long id) {
+
         UserResponse user = authService.getCurrentUser();
         PostEntity originalPost = postRepository.findById(id).get();
         if (user.id() == originalPost.getUser().getId()) {
@@ -84,7 +86,6 @@ public class PostServiceImpl implements PostService {
         return null;
     }
 
-
     @Override
     public List<PostResponse> getPostsByUserId(Long id) {
         return postRepository
@@ -94,7 +95,4 @@ public class PostServiceImpl implements PostService {
                 .toList();
     }
 
-
-    
-    
 }

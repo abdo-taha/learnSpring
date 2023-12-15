@@ -12,7 +12,7 @@ import com.abdo.learn.model.dto.response.ErrorMessageResponse;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
-   
+
     @ExceptionHandler(ResponseStatusException.class)
     public ResponseEntity<?> handleGlobalException(ResponseStatusException e) {
         return ResponseEntity.status(HttpStatus.valueOf(e.getStatusCode().value())).body(getErrorMessageBody(e));
@@ -21,7 +21,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> handleLocalException(Exception e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(getErrorMessageBody(e));
-    } 
+    }
 
     private ErrorMessageResponse getErrorMessageBody(ResponseStatusException e) {
         return ErrorMessageResponse.builder()
@@ -29,13 +29,12 @@ public class GlobalExceptionHandler {
                 .createAt(LocalDateTime.now())
                 .build();
     }
-    
-    private ErrorMessageResponse getErrorMessageBody(Exception e){
+
+    private ErrorMessageResponse getErrorMessageBody(Exception e) {
         return ErrorMessageResponse.builder()
                 .message(e.getMessage())
                 .createAt(LocalDateTime.now())
                 .build();
     }
-    
 
 }
