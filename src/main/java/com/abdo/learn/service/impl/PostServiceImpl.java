@@ -53,6 +53,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public PostResponse getPostById(Long id) {
         PostEntity post = postRepository.findById(id).get();
+        // System.out.println(post);
         return postMapper.PostEntityToPostResponse(post);
     }
 

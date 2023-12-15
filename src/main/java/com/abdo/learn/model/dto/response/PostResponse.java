@@ -4,5 +4,12 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
-public record PostResponse(Long id, String content, UserIdResponse user,LocalDateTime createdAt,Set<PhotoResponse> photos,List<CommentResponse> comments) {
+public record PostResponse(
+        Long id,
+        String content,
+        UserIdResponse user,
+        LocalDateTime createdAt,
+        Set<PhotoResponse> photos,
+        List<CommentResponse> comments,
+        List<LikeResponse> likes ) {
 }
