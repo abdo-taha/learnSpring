@@ -2,6 +2,7 @@ package com.abdo.learn.model.entity;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;
@@ -29,7 +30,8 @@ public class CommentEntity {
     UserEntity user;
     @ManyToOne
     @JoinColumn(name = "post_id", nullable = false)
-    @JsonIgnore 
+    // @JsonBackReference
+    // @JsonIgnore
     PostEntity post;
     LocalDateTime createdAt;
 }

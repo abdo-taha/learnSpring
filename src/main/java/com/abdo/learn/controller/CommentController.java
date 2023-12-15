@@ -23,7 +23,7 @@ public class CommentController {
     final private CommentService commentService;
     @PostMapping("")
     public CommentResponse postMethodName(@RequestBody CommentRequest commentRequest) {
-        // System.out.println(commentRequest);
+        System.out.println(commentRequest);
         return commentService.createComment(commentRequest);
     }
     

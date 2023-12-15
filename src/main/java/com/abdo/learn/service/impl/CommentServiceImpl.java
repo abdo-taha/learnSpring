@@ -8,6 +8,7 @@ import com.abdo.learn.mapper.CommentMapper;
 import com.abdo.learn.model.dto.request.CommentRequest;
 import com.abdo.learn.model.dto.response.CommentResponse;
 import com.abdo.learn.model.entity.CommentEntity;
+import com.abdo.learn.model.entity.PostEntity;
 import com.abdo.learn.model.entity.UserEntity;
 import com.abdo.learn.repository.CommentRepository;
 import com.abdo.learn.repository.PostRepository;
@@ -38,16 +39,22 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public CommentResponse createComment(CommentRequest commentRequest) {
+        // System.out.println("here "+ commentRequest.postId());
+        // System.out.println(postRepository.findById(commentRequest.postId()).get());
+        PostEntity post = postRepository.findById(commentRequest.postId()).get();
+        // System.out.println(post);
         CommentEntity comment = CommentEntity.builder()
             .content(commentRequest.content())
             .createdAt(LocalDateTime.now())
-            .post(postRepository.findById(commentRequest.postId()).get())
-                .user(authService.getCurrentUserEntity()).build();
-        System.out.println(comment);
+            .post(post)
+            .user(authService.getCurrentUserEntity()).build();
+        // System.out.println(comment);
         CommentEntity savedComment = commentRepository.save(comment);
-        System.out.println(savedComment);
+        // System.out.println(savedComment);
         CommentResponse commentResponse = commentMapper.commentEntityToCommentResponse(savedComment);
-        System.out.println(commentResponse);
+        // System.out.println(commentResponse);
+        
+        // System.out.println("............................ "+postRepository.findById(commentRequest.postId()).get());
         return commentResponse;
     }
     
