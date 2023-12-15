@@ -9,5 +9,6 @@ import com.abdo.learn.model.entity.CommentEntity;
 @Mapper(componentModel = "spring")
 public interface CommentMapper {
     CommentMapper INSTANCE = Mappers.getMapper(CommentMapper.class);
+
     CommentResponse commentEntityToCommentResponse(CommentEntity comment);
-} 
+}

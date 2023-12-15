@@ -14,15 +14,14 @@ import com.abdo.learn.model.entity.PostEntity;
 public interface PostMapper {
     PostMapper INSTANCE = Mappers.getMapper(PostMapper.class);
 
-    @Mapping(target = "createdAt" , ignore = true)
-    @Mapping(target = "id" , ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "id", ignore = true)
     @Mapping(target = "user", ignore = true)
     @Mapping(target = "photos", ignore = true)
     @Mapping(target = "comments", ignore = true)
-    @Mapping(target = "likes",ignore = true)
+    @Mapping(target = "likes", ignore = true)
     PostEntity PostRequestToPostEntity(CreatePostRequest post);
 
-    
     PostResponse PostEntityToPostResponse(PostEntity post);
 
     // @Mapping(target = "createdAt", ignore = true)

@@ -1,6 +1,7 @@
 package com.abdo.learn.model.entity;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -34,17 +35,19 @@ public class PostEntity {
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
-    
+
     @Builder.Default
     @OneToMany
     private Set<PhotoEntity> photos = new HashSet<>();
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     // @JsonManagedReference
-    private List<CommentEntity> comments;
+    @Builder.Default
+    private List<CommentEntity> comments = new ArrayList<>();
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<LikePostEntity> likes;
+    @Builder.Default
+    private List<LikePostEntity> likes = new ArrayList<>();
 
     @PrePersist
     protected void onCreate() {
