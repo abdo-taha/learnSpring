@@ -15,21 +15,27 @@ import lombok.RequiredArgsConstructor;
 @Configuration
 @RequiredArgsConstructor
 public class SecurityConfig {
-    
+
     final private JwtAuthenticationFilter jwtAuthenticationFilter;
-    @Bean 
+
+    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> {
-                    request.requestMatchers("/api/v1/auth/**").permitAll();
-                    request.requestMatchers("/data/**").permitAll();
+                    request.requestMatchers("/api/v1/auth/**",
+                            "/data/**",
+                            "/v3/api-docs/",
+                            "/v3/api-docs/**",
+                            "/swagger-ui.html",
+                            "/swagger-ui/**").permitAll();
+                    // request.requestMatchers().permitAll();
                     request.anyRequest().authenticated();
                 })
                 .sessionManagement(conf -> conf.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-        
+
         return http.build();
-        
+
     }
 }

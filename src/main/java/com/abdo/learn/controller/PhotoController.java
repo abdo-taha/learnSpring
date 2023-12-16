@@ -21,8 +21,11 @@ import com.abdo.learn.service.PhotoSaveService;
 import com.abdo.learn.service.UsersService;
 import com.abdo.learn.utils.PhotosUtils;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
+@Tag(name = "photos")
 @RestController
 @RequestMapping("api/v1/photo/")
 @RequiredArgsConstructor
@@ -34,6 +37,7 @@ public class PhotoController {
     final private UserMapper userMapper;
     final private UsersService usersService;
 
+    @Operation(description = "upload", summary = "upload a new photo to the server")
     @PostMapping("/upload")
     public String uploadPhoto(@RequestParam("file") MultipartFile file) throws IllegalStateException, IOException {
         UserEntity user = authService.getCurrentUserEntity();
@@ -43,6 +47,7 @@ public class PhotoController {
         return photoSaveService.save(file, photoName);
     }
 
+    @Operation(description = "delete a photo")
     @DeleteMapping("/{name}")
     public Boolean deletePhoto(@PathVariable String name) {
         // system.out.println(name + " name in controller");
@@ -55,6 +60,7 @@ public class PhotoController {
         return photoSaveService.deletePhoto(name) & photoDBService.deletePhoto(name);
     }
 
+    @Operation(description = "get all photos of a user")
     @GetMapping("/{id}/photos")
     public List<String> getAllPhotos(@PathVariable Long id) {
         UserEntity user = userMapper.UserResponseToUserEntity(usersService.getUser(id));
