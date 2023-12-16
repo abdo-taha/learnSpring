@@ -8,6 +8,7 @@ import com.abdo.learn.model.dto.request.EditPostRequest;
 import com.abdo.learn.model.dto.response.PostResponse;
 import com.abdo.learn.service.PostService;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,10 +21,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 
-
-
-
-
 @RestController
 @RequestMapping("api/v1/post")
 @RequiredArgsConstructor
@@ -31,22 +28,23 @@ public class PostController {
     final private PostService postService;
 
     @PostMapping("/create")
-    public ResponseEntity<PostResponse> createPost(@RequestBody CreatePostRequest post) {
+    public ResponseEntity<PostResponse> createPost(@Valid @RequestBody CreatePostRequest post) {
         return ResponseEntity.ok(postService.createPost(post));
     }
-    
+
     @GetMapping("/{id}")
-    public ResponseEntity<PostResponse>getPost(@PathVariable Long id) {
+    public ResponseEntity<PostResponse> getPost(@PathVariable Long id) {
         return ResponseEntity.ok(postService.getPostById(id));
     }
-    
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Boolean> deletePost(@PathVariable Long id) {
         return ResponseEntity.ok(postService.deletePostById(id));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<PostResponse> editPost(@PathVariable Long id, @RequestBody EditPostRequest post) {
+    public ResponseEntity<PostResponse> editPost(@PathVariable Long id,
+            @Valid @RequestBody EditPostRequest post) {
         return ResponseEntity.ok(postService.editPost(post, id));
     }
 
@@ -54,7 +52,5 @@ public class PostController {
     public ResponseEntity<List<PostResponse>> getMethodName(@PathVariable Long id) {
         return ResponseEntity.ok(postService.getPostsByUserId(id));
     }
-    
-    
-    
+
 }

@@ -38,22 +38,23 @@ public class PhotoController {
     public String uploadPhoto(@RequestParam("file") MultipartFile file) throws IllegalStateException, IOException {
         UserEntity user = authService.getCurrentUserEntity();
         String ext = photosUtils.getExtensionByStringHandling(file.getOriginalFilename());
-        String photoName = photoDBService.savePhotoToDB(user,ext);
+        String photoName = photoDBService.savePhotoToDB(user, ext);
         photoName += "." + ext;
         return photoSaveService.save(file, photoName);
     }
 
     @DeleteMapping("/{name}")
     public Boolean deletePhoto(@PathVariable String name) {
-        //system.out.println(name + "  name in controller");
+        // system.out.println(name + " name in controller");
         UserEntity user = authService.getCurrentUserEntity();
         PhotoEntity photo = photoDBService.getPhotoByName(name);
-        //system.out.println(photo + " photo from controller");
+        // system.out.println(photo + " photo from controller");
         if (photo.getOwner().getId() != user.getId()) {
             return false;
         }
         return photoSaveService.deletePhoto(name) & photoDBService.deletePhoto(name);
     }
+
     @GetMapping("/{id}/photos")
     public List<String> getAllPhotos(@PathVariable Long id) {
         UserEntity user = userMapper.UserResponseToUserEntity(usersService.getUser(id));
