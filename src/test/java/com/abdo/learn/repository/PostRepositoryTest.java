@@ -6,7 +6,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import com.abdo.learn.model.entity.PostEntity;
 import com.abdo.learn.model.entity.UserEntity;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
